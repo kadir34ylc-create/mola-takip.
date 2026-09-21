@@ -39,7 +39,7 @@
         <div>
           <div class="flex items-center gap-2">
             <h1 class="text-base sm:text-lg font-extrabold tracking-tight text-slate-900">Shift & Break AI Director</h1>
-            <span class="text-[10px] bg-indigo-50 text-indigo-700 font-bold px-2 py-0.5 rounded-full border border-indigo-200">Gemini 3.6 Pro-Level</span>
+            <span class="text-[10px] bg-indigo-50 text-indigo-700 font-bold px-2 py-0.5 rounded-full border border-indigo-200" id="activeModelTag">Yedek Korumalı AI</span>
           </div>
           <p class="text-xs text-slate-500 font-medium">80-100 Kişilik Kademeli Mola & Vardiya Koordinatörü</p>
         </div>
@@ -100,7 +100,7 @@
           </div>
         </div>
 
-        <!-- Hızlı Talimat Etiketleri (Quick Prompts) -->
+        <!-- Hızlı Talimat Etiketleri -->
         <div class="flex items-center gap-2 overflow-x-auto pb-1 text-xs">
           <span class="text-slate-400 font-semibold shrink-0 text-[11px]"><i class="fa-solid fa-bolt text-amber-500 mr-1"></i>Hızlı Emirler:</span>
           <button onclick="quickAiAction('Kasa ekibinde izdiham olmaması için molaları 25 dakika aralıkla sırala ve mola dönüşü hangi kasaya geçeceklerini söyle.')" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 text-slate-600 shrink-0 font-medium transition border border-slate-200/60">🛒 Kasaları Kademele</button>
@@ -114,17 +114,17 @@
           <div class="flex items-start gap-2.5">
             <div class="h-7 w-7 rounded-full bg-gradient-to-tr from-indigo-600 to-teal-400 flex items-center justify-center text-[10px] text-white font-bold shrink-0 shadow-xs">AI</div>
             <div class="bg-white rounded-2xl rounded-tl-none p-3.5 text-slate-700 border border-slate-100 shadow-sm max-w-[85%] leading-relaxed">
-              Selam şef! 80 kişilik mağaza operasyonu şu an emrinde. İster kadroları vardiyalara göre dağıt, ister <i>"Ahmet'in yerine Mehmet baksın, kasaları 3 dalgaya böl"</i> de; hem konuşalım hem anında sisteme uygulayayım.
+              Selam şef! 80 kişilik operasyon emrinde. Otomatik yedek model zinciri devrede. İster PDF yükle, ister kadroları yönet; tüm talimatları anında işleme alayım.
             </div>
           </div>
         </div>
 
-        <!-- Dinamik Eylem Önerileri (Yapay Zeka Tarafından Üretilir) -->
+        <!-- Dinamik Öneri Butonları -->
         <div id="quickFollowups" class="hidden flex flex-wrap gap-2 pt-1 border-t border-slate-100 text-xs"></div>
 
         <!-- Sohbet Giriş Alanı -->
         <div class="flex gap-2 pt-1">
-          <input type="text" id="chatInput" onkeydown="if(event.key==='Enter') sendAssistantMessage()" placeholder="Asistana emir verin veya durum sorusu sorun (Örn: 'Reyon 2'ye takviye yap', 'Ahmet'i 13:30'a kaydır')..." class="flex-1 bg-white border border-slate-200 rounded-2xl px-4 py-3 text-xs sm:text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 shadow-xs">
+          <input type="text" id="chatInput" onkeydown="if(event.key==='Enter') sendAssistantMessage()" placeholder="Asistana emir verin (Örn: 'Reyon 2'ye takviye yap', 'Ahmet'i 13:30'a kaydır')..." class="flex-1 bg-white border border-slate-200 rounded-2xl px-4 py-3 text-xs sm:text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 shadow-xs">
           <button onclick="sendAssistantMessage()" id="btnSendChat" class="px-5 py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl text-xs sm:text-sm font-bold flex items-center gap-2 shadow-lg shadow-indigo-600/25 transition">
             <span>Gönder</span>
             <i class="fa-solid fa-paper-plane text-xs"></i>
@@ -161,8 +161,6 @@
       <!-- Kategorizasyon & Filtre Sekmeleri -->
       <div class="glass-panel rounded-2xl p-4 space-y-3 border border-slate-200/80 shadow-sm">
         <div class="flex flex-col md:flex-row gap-3 items-stretch md:items-center justify-between">
-          
-          <!-- Filtreleme Grubu -->
           <div class="flex items-center gap-2 flex-wrap">
             <span class="text-xs font-bold text-slate-400 mr-1">Görünüm:</span>
             <button onclick="setCategoryFilter('all')" class="cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-indigo-600 text-white shadow-sm transition">Tümü</button>
@@ -173,7 +171,6 @@
             <button onclick="setCategoryFilter('Reyon')" class="cat-btn px-3 py-1.5 rounded-xl text-xs font-semibold bg-white text-slate-600 hover:bg-slate-50 border border-slate-200 transition">📦 Reyon Düzeni</button>
           </div>
           
-          <!-- Arama Kutusu -->
           <div class="relative min-w-[240px]">
             <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-slate-400 text-xs"></i>
             <input type="text" id="searchInput" oninput="renderStaffList()" placeholder="Personel, istasyon veya direktif ara..." class="w-full bg-white border border-slate-200 rounded-xl pl-9 pr-3.5 py-2 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-indigo-500 shadow-xs">
@@ -265,11 +262,8 @@
     let currentCategoryFilter = 'all';
     let currentUserId = 1;
     let geminiApiKey = localStorage.getItem('GEMINI_API_KEY') || '';
-
-    // GEMINI MULTI-TURN CHAT GEÇMİŞİ (HAFIZA İÇİN)
     let chatConversationHistory = [];
 
-    // Gerçekçi Mağaza Departmanları, Vardiyaları ve İstasyonları
     const shifts = [
       { name: 'Sabah Vardiyası', start: '08:00', end: '17:00' },
       { name: 'Ara Vardiya', start: '11:00', end: '20:00' },
@@ -310,14 +304,12 @@
     let staffList = [];
     let idCounter = 1;
 
-    // 80 Personeli Otomatik ve Kademeli Olarak Oluştur
     departmentConfigs.forEach(dept => {
       for (let i = 1; i <= dept.count; i++) {
         const randomName = turkishNames[(idCounter - 1) % turkishNames.length] + ' ' + (Math.floor(idCounter / turkishNames.length) > 0 ? (Math.floor(idCounter / turkishNames.length) + 1) : '');
         const shift = shifts[(idCounter - 1) % shifts.length];
         const station = dept.stations[(i - 1) % dept.stations.length];
 
-        // Mola dalgaları (1. Dalga 12:00, 2. Dalga 12:45, 3. Dalga 13:30, vb.)
         const breakWave = ((idCounter - 1) % 4);
         const breakHour = 12 + Math.floor(breakWave * 0.75);
         const breakMin = (breakWave * 35) % 60;
@@ -340,7 +332,6 @@
       }
     });
 
-    // Rol Seçimi
     function setRole(role) {
       currentRole = role;
       if (role === 'admin') {
@@ -359,7 +350,6 @@
       }
     }
 
-    // Filtreleme
     function setCategoryFilter(cat) {
       currentCategoryFilter = cat;
       document.querySelectorAll('.cat-btn').forEach(btn => {
@@ -372,7 +362,6 @@
       renderStaffList();
     }
 
-    // Personel Kartlarını Çizme
     function renderStaffList() {
       const grid = document.getElementById('staffGrid');
       const searchQuery = document.getElementById('searchInput').value.toLowerCase();
@@ -439,29 +428,63 @@
       });
     }
 
-    // ==============================================
-    // GEMINI 3.6 GERÇEK SOHBET & OPERASYON BEYNİ
-    // ==============================================
+    // ==============================================================
+    // KORUMALI & YEDEK MODEL ZİNCİRLİ GEMINI ÇAĞRI MOTORU (FALLBACK)
+    // ==============================================================
     async function callGeminiRaw(contentsArray) {
       if (!geminiApiKey) {
         openApiKeyModal();
         throw new Error("Lütfen önce API anahtarınızı girin.");
       }
 
-      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${geminiApiKey}`;
+      // Sırayla denenecek modeller (Biri yoğunsa diğeri devreye girer)
+      const candidateModels = [
+        'gemini-3.6-flash',
+        'gemini-2.5-flash',
+        'gemini-2.0-flash',
+        'gemini-1.5-flash'
+      ];
 
-      const res = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ contents: contentsArray })
-      });
+      let lastError = null;
 
-      if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.error?.message || "Gemini API isteği başarısız oldu.");
+      for (const model of candidateModels) {
+        try {
+          // Her model için 2 deneme
+          for (let attempt = 0; attempt < 2; attempt++) {
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${geminiApiKey}`;
+            
+            const res = await fetch(url, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ contents: contentsArray })
+            });
+
+            if (res.ok) {
+              const data = await res.json();
+              document.getElementById('activeModelTag').innerText = `${model} Aktif`;
+              return data.candidates[0].content.parts[0].text;
+            }
+
+            const errData = await res.json().catch(() => ({}));
+            const errMsg = errData.error?.message || '';
+
+            // Sunucu aşırı yoğunluk (503 veya high demand) verirse 1.5 sn bekle ve yedek modele geç
+            if (errMsg.includes('high demand') || errMsg.includes('overloaded') || res.status === 503 || res.status === 429) {
+              console.warn(`${model} yoğun, sıradaki modele geçiliyor...`);
+              lastError = new Error(errMsg);
+              await new Promise(r => setTimeout(r, 1200));
+              continue;
+            } else {
+              lastError = new Error(errMsg);
+              break; // Model bulunamadıysa hemen sonraki modele geç
+            }
+          }
+        } catch (e) {
+          lastError = e;
+        }
       }
-      const data = await res.json();
-      return data.candidates[0].content.parts[0].text;
+
+      throw lastError || new Error("Google AI sunucularında genel bir yoğunluk var. Lütfen 15-20 saniye sonra tekrar deneyin.");
     }
 
     function quickAiAction(text) {
@@ -477,7 +500,6 @@
       input.value = '';
       appendChatMessage('user', userText);
 
-      // Personel özeti (Prompt tokenlarını aşmayacak şekilde optimize edilmiş veri)
       const staffSummary = staffList.map(s => ({
         id: s.id,
         name: s.name,
@@ -489,9 +511,8 @@
         directive: s.directive
       }));
 
-      // Güçlü Sistem Eğitimi
       const systemInstruction = `
-Sen bir süpermarket/perakende operasyon direktörü ve mağaza koordinatörü yapay zekasısın.
+Sen bir perakende/süpermarket operasyon direktörü yapay zekasısın.
 Yöneticin sana doğal Türkçe ile mağaza içindeki operasyon, personellerin görev yerleri, mola izdihamı ve vardiyalar hakkında talimatlar veriyor.
 
 MEVCUT KADRO:
@@ -499,12 +520,12 @@ ${JSON.stringify(staffSummary)}
 
 GÖREVLERİN:
 1. Yöneticinin niyetini kusursuz anla:
-   - Eğer personellerin molalarını veya yerlerini değiştirmek istiyorsa (örneğin: 'Kasadakileri kademeli molaya çıkar', 'Ahmet'i 13:00 yap', 'Reyona takviye ver'), 'updates' dizisine gerekli güncellemeleri ekle.
+   - Eğer personellerin molalarını veya yerlerini değiştirmek istiyorsa, 'updates' dizisine gerekli güncellemeleri ekle.
    - Eğer sadece soru soruyorsa veya analiz istiyorsa, 'updates' dizisini boş bırak.
 2. Kasada ya da reyonlarda asla aynı anda yığılma veya boşluk olmamasına dikkat et. Birini molaya yollarken yerine kimin geçeceğini 'directive' olarak planla.
 3. Yöneticinin bir sonraki adımda işine yarayacak 2-3 adet tıklanabilir kısa öneri ('quickFollowups') üret (Örn: ['Kasaya 1 Takviye Ver', '14:00 Molalarını Kontrol Et']).
 
-LÜTFEN SADECE VE SADECE AŞAĞIDAKİ SAF JSON FORMATINDA CEVAP VER (BAŞKA HİÇBİR AÇIKLAMA VEYA METİN EKLEME):
+LÜTFEN SADECE VE SADECE AŞAĞIDAKİ SAF JSON FORMATINDA CEVAP VER:
 {
   "reply": "Yöneticiye samimi, zeki, çözüm odaklı ve net bir Türkçe yanıt.",
   "quickFollowups": ["Öneri 1", "Öneri 2"],
@@ -519,7 +540,6 @@ LÜTFEN SADECE VE SADECE AŞAĞIDAKİ SAF JSON FORMATINDA CEVAP VER (BAŞKA Hİ�
   ]
 }`;
 
-      // Hafızaya ekle
       chatConversationHistory.push({
         role: "user",
         parts: [{ text: `Sistem Bilgisi: ${systemInstruction}\n\nYöneticinin Mesajı: ${userText}` }]
@@ -530,13 +550,11 @@ LÜTFEN SADECE VE SADECE AŞAĞIDAKİ SAF JSON FORMATINDA CEVAP VER (BAŞKA Hİ�
         const cleanJson = rawResponse.replace(/```json/g, '').replace(/```/g, '').trim();
         const parsed = JSON.parse(cleanJson);
 
-        // Modelin yanıtını geçmişe ekle
         chatConversationHistory.push({
           role: "model",
           parts: [{ text: rawResponse }]
         });
 
-        // 1. Kadroyu güncelle
         if (parsed.updates && Array.isArray(parsed.updates) && parsed.updates.length > 0) {
           parsed.updates.forEach(up => {
             const p = staffList.find(item => item.id === up.id);
@@ -551,14 +569,11 @@ LÜTFEN SADECE VE SADECE AŞAĞIDAKİ SAF JSON FORMATINDA CEVAP VER (BAŞKA Hİ�
           if (currentRole === 'staff') updatePersonalView();
         }
 
-        // 2. Cevabı yaz
         appendChatMessage('ai', parsed.reply || "İşlemler kadroya uygulandı şef!");
-
-        // 3. Öneri butonlarını çiz
         renderQuickFollowups(parsed.quickFollowups);
 
       } catch (err) {
-        appendChatMessage('ai', "Hata oluştu veya yanıt çözülemedi: " + err.message);
+        appendChatMessage('ai', "Hata: " + err.message);
       }
     }
 
@@ -596,12 +611,12 @@ LÜTFEN SADECE VE SADECE AŞAĞIDAKİ SAF JSON FORMATINDA CEVAP VER (BAŞKA Hİ�
       });
     }
 
-    // PDF Okuyucu Entegrasyonu
+    // PDF Okuyucu (Otomatik Model Geçişli)
     async function handlePdfUpload(event) {
       const file = event.target.files[0];
       if (!file) return;
 
-      appendChatMessage('ai', 'PDF belgesi analiz ediliyor; personeller, vardiya dilimleri ve görev istasyonları okunuyor...');
+      appendChatMessage('ai', 'PDF belgesi okunuyor; sunucu yoğunluğu kontrol edilip en hızlı modele bağlanılıyor...');
       const reader = new FileReader();
       reader.onload = async function() {
         const base64Data = reader.result.split(',')[1];
@@ -618,138 +633,4 @@ LÜTFEN SADECE VE SADECE AŞAĞIDAKİ SAF JSON FORMATINDA CEVAP VER (BAŞKA Hİ�
             }
           ]);
 
-          const cleanJson = responseText.replace(/```json/g, '').replace(/```/g, '').trim();
-          const parsedStaff = JSON.parse(cleanJson);
-
-          if (Array.isArray(parsedStaff) && parsedStaff.length > 0) {
-            staffList = parsedStaff.map((p, idx) => ({
-              id: idx + 1,
-              name: p.name || `Personel ${idx + 1}`,
-              department: p.department || 'Genel',
-              shiftCategory: p.shiftCategory || 'Sabah Vardiyası',
-              shiftStart: p.shiftStart || '08:00',
-              shiftEnd: p.shiftEnd || '17:00',
-              station: p.station || 'Genel Alan',
-              breakTime: p.breakTime || '12:30',
-              breakDurationMin: 30,
-              status: 'gorevde',
-              directive: 'PDF çizelgesinden atandı.'
-            }));
-            renderStaffList();
-            populateStaffDropdown();
-            appendChatMessage('ai', `Harika! PDF'ten ${parsedStaff.length} personelin tam vardiya ve istasyon bilgileri aktarıldı.`);
-          }
-        } catch (err) {
-          appendChatMessage('ai', 'PDF Okuma Hatası: ' + err.message);
-        }
-      };
-      reader.readAsDataURL(file);
-    }
-
-    // Personel Ekranı Fonksiyonları
-    function populateStaffDropdown() {
-      const sel = document.getElementById('activeUserSelect');
-      sel.innerHTML = '';
-      staffList.forEach(p => {
-        const opt = document.createElement('option');
-        opt.value = p.id;
-        opt.innerText = `${p.name} - ${p.department} (${p.station}) | Mola: ${p.breakTime}`;
-        sel.appendChild(opt);
-      });
-      sel.value = currentUserId;
-    }
-
-    function onUserChange() {
-      currentUserId = parseInt(document.getElementById('activeUserSelect').value);
-      updatePersonalView();
-    }
-
-    function updatePersonalView() {
-      const person = staffList.find(p => p.id === currentUserId);
-      if (!person) return;
-
-      document.getElementById('userNameDisplay').innerText = person.name;
-      document.getElementById('userDeptBadge').innerText = `${person.department} • ${person.shiftCategory}`;
-      document.getElementById('userStationBadge').innerText = person.station;
-      document.getElementById('userShiftTimes').innerText = `Vardiya: ${person.shiftStart} - ${person.shiftEnd}`;
-      document.getElementById('directiveContent').innerText = `"${person.directive}"`;
-
-      const isMolada = person.status === 'molada';
-      document.getElementById('userStatusSub').innerText = isMolada ? 'Şu Anda: Molada' : 'Şu Anda: Görevde';
-      document.getElementById('userStatusSub').className = isMolada ? 'text-xs font-bold text-amber-600 mt-1' : 'text-xs font-bold text-teal-600 mt-1';
-      
-      const btnStart = document.getElementById('btnStartBreak');
-      const btnEnd = document.getElementById('btnEndBreak');
-      const personalCard = document.getElementById('personalCard');
-      
-      if (isMolada) {
-        btnStart.disabled = true;
-        btnStart.className = "py-3.5 px-4 rounded-2xl font-bold text-xs sm:text-sm bg-slate-100 text-slate-400 border border-slate-200 cursor-not-allowed";
-        btnEnd.disabled = false;
-        btnEnd.className = "py-3.5 px-4 rounded-2xl font-bold text-xs sm:text-sm bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg shadow-indigo-600/25";
-        document.getElementById('timerLabel').innerText = "Molanın Bitmesine Kalan Süre";
-        document.getElementById('timerCountdown').innerText = "00:18:45";
-        personalCard.classList.remove('alarm-active');
-      } else {
-        btnStart.disabled = false;
-        btnStart.className = "py-3.5 px-4 rounded-2xl font-bold text-xs sm:text-sm bg-gradient-to-r from-teal-500 to-emerald-600 hover:from-teal-600 text-white shadow-lg shadow-teal-500/25";
-        btnEnd.disabled = true;
-        btnEnd.className = "py-3.5 px-4 rounded-2xl font-bold text-xs sm:text-sm bg-slate-100 text-slate-400 border border-slate-200 cursor-not-allowed";
-        document.getElementById('timerLabel').innerText = "Molaya Çıkışa Kalan Süre";
-        document.getElementById('timerCountdown').innerText = "00:04:40";
-        
-        const banner = document.getElementById('alertBanner');
-        banner.className = "py-1.5 px-3 rounded-xl text-xs font-bold inline-flex items-center gap-2 bg-rose-50 text-rose-600 border border-rose-200 shadow-xs";
-        document.getElementById('alertBannerText').innerText = "DİKKAT: Molanıza son 5 dakika kaldı! Yerini devretmeye hazırlan.";
-        banner.classList.remove('hidden');
-        personalCard.classList.add('alarm-active');
-      }
-    }
-
-    function triggerMyBreak(start) {
-      const person = staffList.find(p => p.id === currentUserId);
-      if (person) {
-        person.status = start ? 'molada' : 'gorevde';
-        updatePersonalView();
-        renderStaffList();
-      }
-    }
-
-    function acknowledgeDirective() {
-      const btn = document.getElementById('btnAckDirective');
-      btn.innerText = "✓ Talimat Alındı & Uygulanıyor";
-      btn.className = "w-full mt-2 py-2 bg-teal-600 text-white text-xs font-bold rounded-xl";
-    }
-
-    function openApiKeyModal() {
-      document.getElementById('geminiApiKeyInput').value = geminiApiKey;
-      document.getElementById('apiKeyModal').classList.remove('hidden');
-    }
-    function closeApiKeyModal() {
-      document.getElementById('apiKeyModal').classList.add('hidden');
-    }
-    function saveApiKey() {
-      const key = document.getElementById('geminiApiKeyInput').value.trim();
-      geminiApiKey = key;
-      localStorage.setItem('GEMINI_API_KEY', key);
-      updateApiKeyStatus();
-      closeApiKeyModal();
-    }
-    function updateApiKeyStatus() {
-      const txt = document.getElementById('apiKeyStatusText');
-      if (geminiApiKey) {
-        txt.innerText = "API Aktif ✓";
-        txt.className = "text-teal-600 font-bold";
-      } else {
-        txt.innerText = "API Anahtarı";
-        txt.className = "text-slate-700";
-      }
-    }
-
-    window.addEventListener('DOMContentLoaded', () => {
-      updateApiKeyStatus();
-      renderStaffList();
-    });
-  </script>
-</body>
-</html>
+          const cleanJson = responseText.replace(/```json/g, '').replace(/
