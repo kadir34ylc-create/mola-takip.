@@ -551,8 +551,8 @@
         throw new Error("Lütfen önce Google AI Studio'dan aldığınız Gemini API anahtarınızı girin.");
       }
 
-      // Gemini 2.5 Flash / 1.5 Flash Endpoint
-      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${geminiApiKey}`;
+      // Gemini-3.6-flash / 1.5 Flash Endpoint
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${geminiApiKey}`;
 
       const contents = [{
         parts: []
