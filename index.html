@@ -3,46 +3,71 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Vardiya & Akıllı Mola Yöneticisi (Gemini Destekli)</title>
+  <title>Shift & Break AI - Akıllı Vardiya ve Mola Asistanı</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    @keyframes pulse-glow {
-      0%, 100% { box-shadow: 0 0 15px rgba(239, 68, 68, 0.4); }
-      50% { box-shadow: 0 0 25px rgba(239, 68, 68, 0.8); }
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
     }
-    .alarm-critical { animation: pulse-glow 1.5s infinite; }
+    @keyframes soft-pulse {
+      0%, 100% { transform: scale(1); box-shadow: 0 10px 25px -5px rgba(244, 63, 94, 0.25); }
+      50% { transform: scale(1.01); box-shadow: 0 20px 35px -5px rgba(244, 63, 94, 0.4); }
+    }
+    .alarm-active {
+      animation: soft-pulse 2s infinite ease-in-out;
+    }
+    .glass-panel {
+      background: rgba(255, 255, 255, 0.82);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(226, 232, 240, 0.8);
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 5px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #f1f5f9;
+      border-radius: 8px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 8px;
+    }
   </style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen font-sans antialiased selection:bg-indigo-500 selection:text-white">
+<body class="bg-gradient-to-br from-slate-50 via-indigo-50/40 to-teal-50/30 text-slate-800 min-h-screen antialiased selection:bg-indigo-500 selection:text-white pb-20">
 
   <!-- Üst Bar / Header -->
-  <header class="border-b border-slate-800 bg-slate-900/90 backdrop-blur sticky top-0 z-40 px-4 py-3">
+  <header class="glass-panel sticky top-0 z-40 px-4 sm:px-6 py-3.5 shadow-sm">
     <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
       <div class="flex items-center gap-3">
-        <div class="h-10 w-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-purple-600 to-pink-500 flex items-center justify-center shadow-lg shadow-indigo-500/20">
-          <i class="fa-solid fa-wand-magic-sparkles text-white text-lg"></i>
+        <div class="h-11 w-11 rounded-2xl bg-gradient-to-tr from-indigo-600 via-violet-500 to-teal-400 flex items-center justify-center shadow-lg shadow-indigo-500/25">
+          <i class="fa-solid fa-sparkles text-white text-lg"></i>
         </div>
         <div>
-          <h1 class="text-base sm:text-lg font-bold tracking-tight text-white flex items-center gap-2">
-            Shift & Break AI
-            <span class="text-[10px] bg-gradient-to-r from-purple-500 to-indigo-500 px-2 py-0.5 rounded-full font-semibold">Gemini 1.5/2.0</span>
-          </h1>
-          <p class="text-xs text-slate-400">80-100 Kişilik İzdihamsız Mola ve Canlı Direktif Sistemi</p>
+          <div class="flex items-center gap-2">
+            <h1 class="text-base sm:text-lg font-extrabold tracking-tight text-slate-900">Shift & Break AI</h1>
+            <span class="text-[10px] bg-gradient-to-r from-indigo-50 to-teal-50 text-indigo-700 font-bold px-2 py-0.5 rounded-full border border-indigo-200/60 shadow-xs">Gemini 3.6 Flash</span>
+          </div>
+          <p class="text-xs text-slate-500 font-medium">Akıllı Vardiya Dağıtımı & Canlı Yönetici Asistanı</p>
         </div>
       </div>
 
-      <!-- Sağ Kontroller: Rol Değiştir & API Key -->
-      <div class="flex items-center gap-2">
-        <button onclick="openApiKeyModal()" class="px-3 py-1.5 rounded-lg border border-slate-700 hover:border-slate-500 bg-slate-800/80 text-xs text-slate-300 flex items-center gap-1.5 transition">
-          <i class="fa-solid fa-key text-amber-400"></i>
+      <!-- Sağ Kontroller -->
+      <div class="flex items-center gap-2.5">
+        <button onclick="openApiKeyModal()" class="px-3.5 py-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-xs font-semibold text-slate-700 shadow-sm flex items-center gap-1.5 transition">
+          <i class="fa-solid fa-key text-amber-500"></i>
           <span id="apiKeyStatusText">API Anahtarı</span>
         </button>
-        <div class="bg-slate-800 p-1 rounded-xl flex items-center border border-slate-700/80">
-          <button id="btnRoleAdmin" onclick="setRole('admin')" class="px-3 py-1 rounded-lg text-xs font-semibold bg-indigo-600 text-white shadow transition">
-            <i class="fa-solid fa-user-shield mr-1"></i> Yönetici
+        <div class="bg-slate-200/70 p-1 rounded-2xl flex items-center shadow-inner">
+          <button id="btnRoleAdmin" onclick="setRole('admin')" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-white text-indigo-600 shadow-sm transition">
+            <i class="fa-solid fa-shield-halved mr-1"></i> Yönetici
           </button>
-          <button id="btnRoleStaff" onclick="setRole('staff')" class="px-3 py-1 rounded-lg text-xs font-semibold text-slate-400 hover:text-white transition">
+          <button id="btnRoleStaff" onclick="setRole('staff')" class="px-3.5 py-1.5 rounded-xl text-xs font-bold text-slate-600 hover:text-slate-900 transition">
             <i class="fa-solid fa-mobile-screen mr-1"></i> Personel
           </button>
         </div>
@@ -50,7 +75,7 @@
     </div>
   </header>
 
-  <!-- Ana İçerik Konteyneri -->
+  <!-- Ana Alan -->
   <main class="max-w-7xl mx-auto p-4 sm:p-6 space-y-6">
 
     <!-- ============================================== -->
@@ -58,142 +83,151 @@
     <!-- ============================================== -->
     <section id="adminView" class="space-y-6">
 
-      <!-- AI Sihirbazı & PDF Yükleme Bannerı -->
-      <div class="rounded-2xl border border-indigo-500/30 bg-gradient-to-r from-slate-900 via-indigo-950/40 to-purple-950/30 p-4 sm:p-6 shadow-xl relative overflow-hidden">
-        <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
-          <div class="space-y-1">
-            <h2 class="text-lg font-bold text-white flex items-center gap-2">
-              <i class="fa-solid fa-robot text-indigo-400"></i>
-              Gemini AI Vardiya & Mola Sihirbazı
-            </h2>
-            <p class="text-sm text-slate-300 max-w-2xl">
-              Vardiya PDF'inizi yükleyin, personelleri otomatik okusun veya seçili departman için <b>çakışmasız mola takvimi</b> çıkarsın.
-            </p>
+      <!-- AI SOHBET ASİSTANI KARTI -->
+      <div class="glass-panel rounded-3xl p-5 sm:p-6 shadow-xl shadow-slate-200/50 space-y-4 border border-indigo-100">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
+          <div class="flex items-center gap-3">
+            <div class="h-10 w-10 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center border border-indigo-100 shadow-xs">
+              <i class="fa-solid fa-comments text-base"></i>
+            </div>
+            <div>
+              <h2 class="text-sm sm:text-base font-bold text-slate-900 flex items-center gap-2">
+                Yönetici Mola Asistanı
+                <span class="inline-block h-2 w-2 rounded-full bg-teal-500 animate-ping"></span>
+              </h2>
+              <p class="text-xs text-slate-500">Doğal dille komut verin; asistan saatleri güncellesin ve görevleri iletsin.</p>
+            </div>
           </div>
-          
-          <div class="flex flex-wrap items-center gap-2 sm:gap-3 w-full lg:w-auto">
-            <!-- PDF Yükle Butonu -->
-            <label class="cursor-pointer px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-600 text-xs sm:text-sm font-medium text-slate-200 flex items-center justify-center gap-2 transition flex-1 sm:flex-initial">
-              <i class="fa-solid fa-file-pdf text-red-400 text-base"></i>
+          <div class="flex items-center gap-2 w-full sm:w-auto">
+            <!-- PDF Tara -->
+            <label class="cursor-pointer px-3.5 py-2 rounded-xl bg-white hover:bg-slate-50 border border-slate-200 text-xs font-semibold text-slate-700 shadow-sm flex items-center justify-center gap-2 transition flex-1 sm:flex-initial">
+              <i class="fa-solid fa-file-pdf text-rose-500 text-sm"></i>
               <span>Vardiya PDF Yükle</span>
               <input type="file" id="pdfFileInput" accept="application/pdf" class="hidden" onchange="handlePdfUpload(event)">
             </label>
-
-            <!-- Gemini Mola Optimize Butonu -->
-            <button onclick="runGeminiBreakWizard()" id="btnAiWizard" class="px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white text-xs sm:text-sm font-semibold shadow-lg shadow-indigo-600/30 flex items-center justify-center gap-2 transition flex-1 sm:flex-initial">
+            <!-- Otomatik Dengele -->
+            <button onclick="runGeminiBreakWizard()" class="px-3.5 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-xs font-semibold text-white shadow-md shadow-indigo-500/20 transition flex items-center justify-center gap-1.5 flex-1 sm:flex-initial">
               <i class="fa-solid fa-wand-magic-sparkles"></i>
               <span>Molaları Dengele</span>
             </button>
           </div>
         </div>
 
-        <!-- AI İşlem Durum Bildirimi -->
-        <div id="aiLoadingIndicator" class="hidden mt-4 pt-4 border-t border-indigo-500/20 flex items-center gap-3 text-xs sm:text-sm text-indigo-300">
-          <i class="fa-solid fa-spinner fa-spin text-lg"></i>
-          <span id="aiLoadingText">Gemini yapay zekası dosyayı inceliyor ve mola planı oluşturuyor...</span>
+        <!-- Sohbet Mesajları -->
+        <div id="chatMessages" class="custom-scrollbar space-y-3 max-h-56 overflow-y-auto pr-2 text-xs">
+          <div class="flex items-start gap-2.5">
+            <div class="h-7 w-7 rounded-full bg-gradient-to-tr from-indigo-600 to-teal-400 flex items-center justify-center text-[10px] text-white font-bold shrink-0 shadow-xs">AI</div>
+            <div class="bg-white rounded-2xl rounded-tl-none p-3.5 text-slate-700 border border-slate-100 shadow-sm max-w-[85%] leading-relaxed">
+              Selamlar şef! Ekip hazır. İster <i>"Ahmet Yılmaz'ın molasını 14:00'e al ve mola dönüşü Kasa 3'e geç de"</i>, ister <i>"Kasadakileri 15 dk erken çıkar"</i> de; hemen uygulayayım.
+            </div>
+          </div>
+        </div>
+
+        <!-- Sohbet Giriş Kutusu -->
+        <div class="flex gap-2">
+          <input type="text" id="chatInput" onkeydown="if(event.key==='Enter') sendAssistantMessage()" placeholder="Talimat yazın (Örn: 'Mehmet Kaya'yı acil molaya al', 'Reyon molalarını 20 dk öne çek')..." class="flex-1 bg-white border border-slate-200 rounded-2xl px-4 py-3 text-xs sm:text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 shadow-xs">
+          <button onclick="sendAssistantMessage()" id="btnSendChat" class="px-5 py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl text-xs sm:text-sm font-bold flex items-center gap-2 shadow-lg shadow-indigo-600/25 transition">
+            <span>Gönder</span>
+            <i class="fa-solid fa-paper-plane text-xs"></i>
+          </button>
         </div>
       </div>
 
-      <!-- Canlı Metrik Sayaçları -->
+      <!-- Canlı Metrik Kartları -->
       <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-        <div class="bg-slate-900 border border-slate-800 rounded-xl p-3 sm:p-4">
-          <div class="text-xs text-slate-400 font-medium">Toplam Personel</div>
-          <div id="statTotal" class="text-xl sm:text-2xl font-bold text-white mt-1">80</div>
+        <div class="glass-panel rounded-2xl p-4 border border-slate-200/80 shadow-sm hover:shadow-md transition">
+          <div class="text-xs font-semibold text-slate-500">Toplam Personel</div>
+          <div id="statTotal" class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1">80</div>
         </div>
-        <div class="bg-slate-900 border border-slate-800 rounded-xl p-3 sm:p-4">
-          <div class="text-xs text-emerald-400 font-medium flex items-center gap-1.5">
-            <span class="h-2 w-2 rounded-full bg-emerald-400 animate-ping"></span> Görevde
+        <div class="glass-panel rounded-2xl p-4 border border-slate-200/80 shadow-sm hover:shadow-md transition">
+          <div class="text-xs font-semibold text-teal-600 flex items-center gap-1.5">
+            <span class="h-2 w-2 rounded-full bg-teal-500"></span> Görevde
           </div>
-          <div id="statActive" class="text-xl sm:text-2xl font-bold text-white mt-1">68</div>
+          <div id="statActive" class="text-2xl sm:text-3xl font-extrabold text-teal-600 mt-1">68</div>
         </div>
-        <div class="bg-slate-900 border border-slate-800 rounded-xl p-3 sm:p-4">
-          <div class="text-xs text-amber-400 font-medium flex items-center gap-1.5">
+        <div class="glass-panel rounded-2xl p-4 border border-slate-200/80 shadow-sm hover:shadow-md transition">
+          <div class="text-xs font-semibold text-amber-600 flex items-center gap-1.5">
             <i class="fa-solid fa-mug-hot"></i> Molada
           </div>
-          <div id="statInBreak" class="text-xl sm:text-2xl font-bold text-white mt-1">12</div>
+          <div id="statInBreak" class="text-2xl sm:text-3xl font-extrabold text-amber-600 mt-1">12</div>
         </div>
-        <div class="bg-slate-900 border border-slate-800 rounded-xl p-3 sm:p-4">
-          <div class="text-xs text-rose-400 font-medium flex items-center gap-1.5">
+        <div class="glass-panel rounded-2xl p-4 border border-slate-200/80 shadow-sm hover:shadow-md transition">
+          <div class="text-xs font-semibold text-rose-500 flex items-center gap-1.5">
             <i class="fa-solid fa-bell"></i> Mola Yaklaşan (10dk)
           </div>
-          <div id="statPendingBreak" class="text-xl sm:text-2xl font-bold text-white mt-1">5</div>
+          <div id="statPendingBreak" class="text-2xl sm:text-3xl font-extrabold text-rose-500 mt-1">5</div>
         </div>
       </div>
 
-      <!-- Filtreler & Arama Barı -->
-      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col md:flex-row gap-3 items-stretch md:items-center justify-between">
-        <div class="flex items-center gap-2 flex-wrap">
-          <button onclick="filterDept('Tümü')" class="dept-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-indigo-600 text-white">Tümü (80)</button>
-          <button onclick="filterDept('Kasa')" class="dept-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 text-slate-300 hover:bg-slate-700">Kasa (25)</button>
-          <button onclick="filterDept('Reyon')" class="dept-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 text-slate-300 hover:bg-slate-700">Reyon (30)</button>
-          <button onclick="filterDept('Depo/Sevkiyat')" class="dept-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 text-slate-300 hover:bg-slate-700">Depo/Sevkiyat (15)</button>
-          <button onclick="filterDept('Müşteri Hizmetleri')" class="dept-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 text-slate-300 hover:bg-slate-700">Müşteri Hiz. (10)</button>
+      <!-- Departman Filtreleri & Arama -->
+      <div class="glass-panel rounded-2xl p-3.5 flex flex-col md:flex-row gap-3 items-stretch md:items-center justify-between border border-slate-200/80 shadow-sm">
+        <div class="flex items-center gap-1.5 flex-wrap">
+          <button onclick="filterDept('Tümü')" class="dept-btn px-3.5 py-1.5 rounded-xl text-xs font-bold bg-indigo-600 text-white shadow-sm transition">Tümü (80)</button>
+          <button onclick="filterDept('Kasa')" class="dept-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-white text-slate-600 hover:bg-slate-50 border border-slate-200/80 transition">Kasa (25)</button>
+          <button onclick="filterDept('Reyon')" class="dept-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-white text-slate-600 hover:bg-slate-50 border border-slate-200/80 transition">Reyon (30)</button>
+          <button onclick="filterDept('Depo/Sevkiyat')" class="dept-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-white text-slate-600 hover:bg-slate-50 border border-slate-200/80 transition">Depo/Sevkiyat (15)</button>
+          <button onclick="filterDept('Müşteri Hizmetleri')" class="dept-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-white text-slate-600 hover:bg-slate-50 border border-slate-200/80 transition">Müşteri Hiz. (10)</button>
         </div>
         
         <div class="relative min-w-[240px]">
-          <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-slate-400 text-xs"></i>
-          <input type="text" id="searchInput" oninput="renderStaffList()" placeholder="Personel veya görev ara..." class="w-full bg-slate-950 border border-slate-700 rounded-xl pl-9 pr-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500">
+          <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-slate-400 text-xs"></i>
+          <input type="text" id="searchInput" oninput="renderStaffList()" placeholder="Personel veya görev ara..." class="w-full bg-white border border-slate-200 rounded-xl pl-9 pr-3.5 py-2 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-indigo-500 shadow-xs">
         </div>
       </div>
 
       <!-- Personel Listesi Grid -->
-      <div id="staffGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-        <!-- JavaScript ile dinamik kartlar doldurulacak -->
-      </div>
+      <div id="staffGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5"></div>
     </section>
 
     <!-- ============================================== -->
-    <!-- 2. PERSONEL EKRANI (Canlı Sayaç & Görev Takibi) -->
+    <!-- 2. PERSONEL EKRANI                             -->
     <!-- ============================================== -->
     <section id="staffView" class="hidden space-y-6 max-w-xl mx-auto">
-      <!-- Personel Seçim Kartı (Simülasyon için) -->
-      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4">
-        <label class="text-xs text-slate-400 block mb-2 font-medium">Test İçin Personel Seç:</label>
-        <select id="activeUserSelect" onchange="onUserChange()" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
-          <!-- JS ile doldurulacak -->
-        </select>
+      <div class="glass-panel rounded-2xl p-4 border border-slate-200 shadow-sm">
+        <label class="text-xs font-bold text-slate-600 block mb-1.5">Görüntülenen Personel:</label>
+        <select id="activeUserSelect" onchange="onUserChange()" class="w-full bg-white border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm font-semibold text-slate-800 focus:outline-none focus:border-indigo-500 shadow-xs"></select>
       </div>
 
-      <!-- Canlı Mola / Vardiya Durum Kartı -->
-      <div id="personalCard" class="bg-gradient-to-b from-slate-900 to-slate-950 border border-slate-800 rounded-3xl p-6 text-center space-y-5 shadow-2xl relative overflow-hidden">
-        <div class="flex justify-between items-center text-xs text-slate-400">
-          <span id="userDeptBadge" class="bg-slate-800 px-3 py-1 rounded-full text-indigo-300 border border-slate-700">Kasa Departmanı</span>
-          <span id="userShiftTimes">09:00 - 18:00</span>
+      <!-- Canlı Kart -->
+      <div id="personalCard" class="bg-white rounded-3xl p-6 sm:p-8 text-center space-y-6 shadow-xl shadow-slate-200/70 border border-slate-200/80 relative overflow-hidden transition-all duration-300">
+        <div class="flex justify-between items-center text-xs">
+          <span id="userDeptBadge" class="bg-indigo-50 text-indigo-700 font-bold px-3 py-1 rounded-full border border-indigo-100">Kasa Departmanı</span>
+          <span id="userShiftTimes" class="text-slate-500 font-medium">09:00 - 18:00</span>
         </div>
 
         <div>
-          <h3 id="userNameDisplay" class="text-2xl font-bold text-white">Ahmet Yılmaz</h3>
-          <p id="userStatusSub" class="text-sm text-slate-400 mt-0.5">Şu Anda: Görevde</p>
+          <h3 id="userNameDisplay" class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">Ahmet Yılmaz</h3>
+          <p id="userStatusSub" class="text-xs font-semibold text-teal-600 mt-1">Şu Anda: Görevde</p>
         </div>
 
-        <!-- Büyük Canlı Sayaç -->
-        <div id="timerContainer" class="p-6 rounded-2xl bg-slate-950/80 border border-slate-800/80 space-y-2">
-          <div id="timerLabel" class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Molaya Kalan Süre</div>
-          <div id="timerCountdown" class="text-5xl font-black text-indigo-400 tracking-tight font-mono">00:14:32</div>
-          <div id="alertBanner" class="hidden py-1 px-3 rounded-lg text-xs font-bold inline-flex items-center gap-1.5">
+        <!-- Sayaç -->
+        <div id="timerContainer" class="p-6 rounded-2xl bg-slate-50/80 border border-slate-200/80 space-y-2">
+          <div id="timerLabel" class="text-[11px] uppercase tracking-wider text-slate-500 font-bold">Molaya Çıkışa Kalan Süre</div>
+          <div id="timerCountdown" class="text-5xl sm:text-6xl font-black text-indigo-600 tracking-tight font-mono">00:04:40</div>
+          <div id="alertBanner" class="py-1.5 px-3 rounded-xl text-xs font-bold inline-flex items-center gap-2 bg-rose-50 text-rose-600 border border-rose-200 shadow-xs">
             <i class="fa-solid fa-triangle-exclamation"></i>
-            <span id="alertBannerText">Molaya son 5 dakika! Lütfen sıranızı hazırlayın.</span>
+            <span id="alertBannerText">DİKKAT: Molanıza son 5 dakika kaldı!</span>
           </div>
         </div>
 
-        <!-- Mola İşlem Butonları -->
+        <!-- Butonlar -->
         <div class="grid grid-cols-2 gap-3 pt-2">
-          <button id="btnStartBreak" onclick="triggerMyBreak(true)" class="py-3 px-4 rounded-xl font-bold text-sm bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg shadow-emerald-600/20 transition">
+          <button id="btnStartBreak" onclick="triggerMyBreak(true)" class="py-3.5 px-4 rounded-2xl font-bold text-xs sm:text-sm bg-gradient-to-r from-teal-500 to-emerald-600 hover:from-teal-600 hover:to-emerald-700 text-white shadow-lg shadow-teal-500/25 transition">
             <i class="fa-solid fa-mug-hot mr-1.5"></i> Molayı Başlat
           </button>
-          <button id="btnEndBreak" onclick="triggerMyBreak(false)" class="py-3 px-4 rounded-xl font-bold text-sm bg-slate-800 text-slate-400 border border-slate-700 cursor-not-allowed transition" disabled>
+          <button id="btnEndBreak" onclick="triggerMyBreak(false)" class="py-3.5 px-4 rounded-2xl font-bold text-xs sm:text-sm bg-slate-100 text-slate-400 border border-slate-200 cursor-not-allowed transition" disabled>
             <i class="fa-solid fa-check mr-1.5"></i> Molayı Bitir
           </button>
         </div>
 
-        <!-- Yöneticiden Gelen Direktif Kutusu -->
-        <div id="directiveBox" class="p-4 rounded-2xl bg-indigo-950/40 border border-indigo-500/30 text-left space-y-2">
-          <div class="flex items-center justify-between text-xs text-indigo-300 font-semibold">
-            <span><i class="fa-solid fa-clipboard-check mr-1"></i> Yöneticiden Talimat</span>
-            <span class="text-[10px] text-slate-400">Yeni</span>
+        <!-- Yöneticiden Görev Kutusu -->
+        <div id="directiveBox" class="p-4 rounded-2xl bg-indigo-50/70 border border-indigo-100 text-left space-y-2 shadow-xs">
+          <div class="flex items-center justify-between text-xs text-indigo-800 font-bold">
+            <span class="flex items-center gap-1.5"><i class="fa-solid fa-clipboard-check text-indigo-600"></i> Yöneticiden Talimat</span>
+            <span class="text-[10px] bg-indigo-100 px-2 py-0.5 rounded-full font-bold">Aktif Görev</span>
           </div>
-          <p id="directiveContent" class="text-sm text-slate-200">"Mola dönüşü Kasa 3 yerine Reyon 2 reyon düzenine destek ver."</p>
-          <button onclick="acknowledgeDirective()" id="btnAckDirective" class="w-full mt-2 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-lg transition">
+          <p id="directiveContent" class="text-xs sm:text-sm text-slate-700 font-medium leading-relaxed">"Vardiya başlangıç alanında hazır ol."</p>
+          <button onclick="acknowledgeDirective()" id="btnAckDirective" class="w-full mt-2 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl shadow-xs transition">
             Talimatı Aldım & Onayla
           </button>
         </div>
@@ -202,74 +236,35 @@
 
   </main>
 
-  <!-- ============================================== -->
-  <!-- MODALLER: API Key & Direktif Gönder            -->
-  <!-- ============================================== -->
-
-  <!-- 1. Direktif Gönderme Modalı -->
-  <div id="directiveModal" class="hidden fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="bg-slate-900 border border-slate-800 w-full max-w-md rounded-2xl p-5 space-y-4">
+  <!-- API Anahtarı Modalı -->
+  <div id="apiKeyModal" class="hidden fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white border border-slate-200 w-full max-w-md rounded-3xl p-6 space-y-4 shadow-2xl">
       <div class="flex justify-between items-center">
-        <h3 class="text-sm font-bold text-white flex items-center gap-2">
-          <i class="fa-solid fa-paper-plane text-indigo-400"></i>
-          Personele Görev Direktifi İlet
+        <h3 class="text-sm sm:text-base font-bold text-slate-900 flex items-center gap-2">
+          <i class="fa-solid fa-key text-amber-500"></i> Google Gemini API Anahtarı
         </h3>
-        <button onclick="closeDirectiveModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+        <button onclick="closeApiKeyModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
       </div>
-      <div>
-        <div class="text-xs text-slate-400">Personel: <b id="modalTargetName" class="text-slate-200">Ahmet Yılmaz</b></div>
-      </div>
-      <div>
-        <label class="text-xs text-slate-300 block mb-1.5 font-medium">Görev / Mola Yönlendirmesi:</label>
-        <textarea id="modalDirectiveInput" rows="3" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-indigo-500" placeholder="Örn: Mola dönüşü Reyon 4'teki reyon düzenine geç. Mehmet'i molaya yolla."></textarea>
-      </div>
+      <p class="text-xs text-slate-500 leading-relaxed">Google AI Studio'dan aldığınız anahtarınızı girin. Bilgiler sadece tarayıcınızda güvenle saklanır.</p>
+      <input type="password" id="geminiApiKeyInput" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-800 focus:outline-none focus:border-indigo-500 font-mono shadow-inner" placeholder="AIzaSy...">
       <div class="flex justify-end gap-2 pt-2">
-        <button onclick="closeDirectiveModal()" class="px-3 py-1.5 bg-slate-800 text-slate-300 text-xs rounded-lg hover:bg-slate-700">Vazgeç</button>
-        <button onclick="submitDirective()" class="px-4 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-lg">Gönder</button>
+        <button onclick="closeApiKeyModal()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl">Kapat</button>
+        <button onclick="saveApiKey()" class="px-5 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-xl shadow-md shadow-indigo-600/25">Kaydet</button>
       </div>
     </div>
   </div>
 
-  <!-- 2. Gemini API Anahtarı Modalı -->
-  <div id="apiKeyModal" class="hidden fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="bg-slate-900 border border-slate-800 w-full max-w-md rounded-2xl p-5 space-y-4">
-      <div class="flex justify-between items-center">
-        <h3 class="text-sm font-bold text-white flex items-center gap-2">
-          <i class="fa-solid fa-key text-amber-400"></i>
-          Google Gemini API Anahtarı
-        </h3>
-        <button onclick="closeApiKeyModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
-      </div>
-      <p class="text-xs text-slate-300">
-        Google AI Studio'dan (<a href="https://aistudio.google.com/" target="_blank" class="text-indigo-400 underline">aistudio.google.com</a>) aldığınız ücretsiz Gemini API anahtarınızı girin.
-      </p>
-      <div>
-        <input type="password" id="geminiApiKeyInput" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-500 font-mono" placeholder="AIzaSy...">
-      </div>
-      <div class="flex justify-end gap-2 pt-2">
-        <button onclick="closeApiKeyModal()" class="px-3 py-1.5 bg-slate-800 text-slate-300 text-xs rounded-lg">Kapat</button>
-        <button onclick="saveApiKey()" class="px-4 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-lg">Kaydet</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ============================================== -->
-  <!-- JAVASCRIPT MOTORU                              -->
-  <!-- ============================================== -->
   <script>
-    // 1. Durum ve 80 Kişilik Veritabanı
     let currentRole = 'admin';
     let currentDeptFilter = 'Tümü';
     let currentUserId = 1;
-    let targetDirectiveUserId = null;
     let geminiApiKey = localStorage.getItem('GEMINI_API_KEY') || '';
 
-    // Departmanlar ve personellerin simülasyon listesi
     const departments = [
-      { name: 'Kasa', count: 25, prefix: 'Kasa Personeli' },
-      { name: 'Reyon', count: 30, prefix: 'Reyon Görevlisi' },
-      { name: 'Depo/Sevkiyat', count: 15, prefix: 'Lojistik/Depo' },
-      { name: 'Müşteri Hizmetleri', count: 10, prefix: 'Danışma Yetkilisi' }
+      { name: 'Kasa', count: 25 },
+      { name: 'Reyon', count: 30 },
+      { name: 'Depo/Sevkiyat', count: 15 },
+      { name: 'Müşteri Hizmetleri', count: 10 }
     ];
 
     const turkishNames = [
@@ -282,12 +277,9 @@
     let staffList = [];
     let idCounter = 1;
 
-    // 80 Personeli Otomatik Oluştur
     departments.forEach(dept => {
       for (let i = 1; i <= dept.count; i++) {
         const randomName = turkishNames[(idCounter - 1) % turkishNames.length] + ' ' + (Math.floor(idCounter / turkishNames.length) > 0 ? (Math.floor(idCounter / turkishNames.length) + 1) : '');
-        
-        // Mola saati dağılımı (12:00 - 16:00 arası dengeli)
         const breakHour = 12 + Math.floor((i * 18) / 60);
         const breakMinute = (i * 18) % 60;
         const breakTimeStr = `${String(breakHour).padStart(2,'0')}:${String(breakMinute).padStart(2,'0')}`;
@@ -300,63 +292,53 @@
           shiftEnd: '18:00',
           breakTime: breakTimeStr,
           breakDurationMin: 30,
-          status: (i <= 3) ? 'molada' : 'gorevde', // İlk birkaçı örnek molada
-          breakRemainingSec: (i <= 3) ? (15 * 60) : null,
+          status: (i <= 3) ? 'molada' : 'gorevde',
           directive: 'Vardiya başlangıç alanında hazır ol.'
         });
         idCounter++;
       }
     });
 
-    // 2. Rol Değiştirme
     function setRole(role) {
       currentRole = role;
       if (role === 'admin') {
         document.getElementById('adminView').classList.remove('hidden');
         document.getElementById('staffView').classList.add('hidden');
-        document.getElementById('btnRoleAdmin').className = "px-3 py-1 rounded-lg text-xs font-semibold bg-indigo-600 text-white shadow";
-        document.getElementById('btnRoleStaff').className = "px-3 py-1 rounded-lg text-xs font-semibold text-slate-400 hover:text-white";
+        document.getElementById('btnRoleAdmin').className = "px-3.5 py-1.5 rounded-xl text-xs font-bold bg-white text-indigo-600 shadow-sm";
+        document.getElementById('btnRoleStaff').className = "px-3.5 py-1.5 rounded-xl text-xs font-bold text-slate-600 hover:text-slate-900";
         renderStaffList();
       } else {
         document.getElementById('adminView').classList.add('hidden');
         document.getElementById('staffView').classList.remove('hidden');
-        document.getElementById('btnRoleStaff').className = "px-3 py-1 rounded-lg text-xs font-semibold bg-indigo-600 text-white shadow";
-        document.getElementById('btnRoleAdmin').className = "px-3 py-1 rounded-lg text-xs font-semibold text-slate-400 hover:text-white";
+        document.getElementById('btnRoleStaff').className = "px-3.5 py-1.5 rounded-xl text-xs font-bold bg-white text-indigo-600 shadow-sm";
+        document.getElementById('btnRoleAdmin').className = "px-3.5 py-1.5 rounded-xl text-xs font-bold text-slate-600 hover:text-slate-900";
         populateStaffDropdown();
         updatePersonalView();
       }
     }
 
-    // 3. Departman Filtresi
     function filterDept(dept) {
       currentDeptFilter = dept;
       document.querySelectorAll('.dept-btn').forEach(btn => {
-        if (btn.innerText.startsWith(dept)) {
-          btn.className = "dept-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-indigo-600 text-white";
-        } else {
-          btn.className = "dept-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 text-slate-300 hover:bg-slate-700";
-        }
+        btn.className = btn.innerText.startsWith(dept) 
+          ? "dept-btn px-3.5 py-1.5 rounded-xl text-xs font-bold bg-indigo-600 text-white shadow-sm" 
+          : "dept-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-white text-slate-600 hover:bg-slate-50 border border-slate-200/80";
       });
       renderStaffList();
     }
 
-    // 4. Yönetici Personel Kartlarını Çizme
     function renderStaffList() {
       const grid = document.getElementById('staffGrid');
       const searchQuery = document.getElementById('searchInput').value.toLowerCase();
       grid.innerHTML = '';
 
-      let activeCount = 0;
-      let inBreakCount = 0;
-      let pendingBreakCount = 0;
-
+      let activeCount = 0, inBreakCount = 0;
       const filtered = staffList.filter(s => {
         const matchesDept = (currentDeptFilter === 'Tümü') || (s.department === currentDeptFilter);
         const matchesSearch = s.name.toLowerCase().includes(searchQuery) || s.department.toLowerCase().includes(searchQuery);
         return matchesDept && matchesSearch;
       });
 
-      // İstatistik sayaçları
       staffList.forEach(s => {
         if (s.status === 'molada') inBreakCount++;
         else activeCount++;
@@ -373,39 +355,32 @@
         
         card.className = `p-4 rounded-2xl border transition-all ${
           isMolada 
-            ? 'bg-amber-950/20 border-amber-500/40 ring-1 ring-amber-500/20' 
-            : 'bg-slate-900/90 border-slate-800 hover:border-slate-700'
+            ? 'bg-amber-50/70 border-amber-200/90 shadow-sm' 
+            : 'bg-white border-slate-200/80 hover:border-indigo-200 hover:shadow-md'
         }`;
 
         card.innerHTML = `
           <div class="flex items-start justify-between gap-2">
             <div>
               <div class="flex items-center gap-2">
-                <h4 class="font-bold text-sm text-white">${person.name}</h4>
-                <span class="text-[10px] px-2 py-0.5 rounded-full ${
-                  isMolada ? 'bg-amber-500/20 text-amber-300' : 'bg-emerald-500/20 text-emerald-300'
+                <h4 class="font-bold text-sm text-slate-900">${person.name}</h4>
+                <span class="text-[10px] px-2 py-0.5 rounded-full font-bold ${
+                  isMolada ? 'bg-amber-100 text-amber-700' : 'bg-teal-50 text-teal-700 border border-teal-200/60'
                 }">
                   ${isMolada ? '<i class="fa-solid fa-mug-hot"></i> Molada' : '<i class="fa-solid fa-check"></i> Görevde'}
                 </span>
               </div>
-              <p class="text-xs text-slate-400 mt-0.5">${person.department} • Vardiya: ${person.shiftStart}-${person.shiftEnd}</p>
-            </div>
-            <button onclick="openDirectiveModal(${person.id})" title="Görev / Direktif Gönder" class="h-8 w-8 rounded-lg bg-indigo-600/20 hover:bg-indigo-600 text-indigo-300 hover:text-white flex items-center justify-center transition">
-              <i class="fa-solid fa-paper-plane text-xs"></i>
-            </button>
-          </div>
-
-          <div class="mt-3 pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs">
-            <div class="text-slate-400">
-              Mola Saati: <span class="text-slate-200 font-semibold">${person.breakTime}</span> (${person.breakDurationMin} dk)
-            </div>
-            <div class="text-[11px] font-mono ${isMolada ? 'text-amber-400 font-bold' : 'text-slate-500'}">
-              ${isMolada ? 'Molanın bitimine ~12 dk' : 'Sıradaki mola'}
+              <p class="text-xs text-slate-500 mt-0.5 font-medium">${person.department} • Vardiya: ${person.shiftStart}-${person.shiftEnd}</p>
             </div>
           </div>
-          
-          <div class="mt-2 text-[11px] text-slate-400 bg-slate-950/60 rounded-lg p-2 flex items-center gap-1.5 truncate">
-            <i class="fa-solid fa-thumbtack text-indigo-400 text-[10px]"></i>
+          <div class="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between text-xs">
+            <div class="text-slate-500 font-medium">Mola: <span class="text-slate-800 font-bold">${person.breakTime}</span></div>
+            <div class="text-[11px] font-mono font-semibold ${isMolada ? 'text-amber-600' : 'text-slate-400'}">
+              ${isMolada ? 'Şu An Molada' : 'Sıradaki Mola'}
+            </div>
+          </div>
+          <div class="mt-2 text-[11px] text-slate-600 bg-slate-50 rounded-xl p-2 flex items-center gap-1.5 truncate border border-slate-100 font-medium">
+            <i class="fa-solid fa-thumbtack text-indigo-500 text-[10px]"></i>
             <span class="truncate">${person.directive}</span>
           </div>
         `;
@@ -413,34 +388,168 @@
       });
     }
 
-    // 5. Direktif Verme İşlemleri
-    function openDirectiveModal(id) {
-      targetDirectiveUserId = id;
-      const person = staffList.find(p => p.id === id);
-      document.getElementById('modalTargetName').innerText = person.name + ` (${person.department})`;
-      document.getElementById('modalDirectiveInput').value = person.directive;
-      document.getElementById('directiveModal').classList.remove('hidden');
-    }
-
-    function closeDirectiveModal() {
-      document.getElementById('directiveModal').classList.add('hidden');
-    }
-
-    function submitDirective() {
-      const text = document.getElementById('modalDirectiveInput').value.trim();
-      if (!text) return;
-      const person = staffList.find(p => p.id === targetDirectiveUserId);
-      if (person) {
-        person.directive = text;
-        renderStaffList();
-        if (currentRole === 'staff' && currentUserId === person.id) {
-          updatePersonalView();
-        }
+    // ==============================================
+    // GEMINI 3.6 API & ASİSTAN MOTORU
+    // ==============================================
+    async function callGemini(promptText, inlineData = null) {
+      if (!geminiApiKey) {
+        openApiKeyModal();
+        throw new Error("Lütfen API anahtarınızı girin.");
       }
-      closeDirectiveModal();
+
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${geminiApiKey}`;
+      const contents = [{ parts: [] }];
+
+      if (inlineData) {
+        contents[0].parts.push({
+          inline_data: { mime_type: inlineData.mime_type, data: inlineData.base64 }
+        });
+      }
+      contents[0].parts.push({ text: promptText });
+
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ contents })
+      });
+
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error?.message || "Gemini API isteği başarısız oldu.");
+      }
+      const data = await res.json();
+      return data.candidates[0].content.parts[0].text;
     }
 
-    // 6. Personel Görünümü ve Canlı Geri Sayım
+    async function sendAssistantMessage() {
+      const input = document.getElementById('chatInput');
+      const userText = input.value.trim();
+      if (!userText) return;
+
+      input.value = '';
+      appendChatMessage('user', userText);
+
+      const staffSummary = staffList.map(s => ({ id: s.id, name: s.name, dept: s.department, break: s.breakTime, directive: s.directive, status: s.status }));
+
+      const systemPrompt = `
+Sen bir mağaza ve vardiya operasyon yapay zeka asistanısın. Yöneticin sana emir veriyor.
+Mevcut personeller:
+${JSON.stringify(staffSummary)}
+
+Yöneticinin komutu: "${userText}"
+
+GÖREVİN:
+1. Yöneticinin isteğini uygula. Personellerin mola saatlerini (breakTime) değiştir, direktiflerini (directive) güncelle veya mola durumlarını (status: 'molada' veya 'gorevde') değiştir.
+2. Yanıtı SADECE aşağıdaki saf JSON formatında ver (başka hiçbir metin ve markdown ekleme):
+{
+  "reply": "Yöneticiye sıcak, net onay cevabı (Örn: Ahmet Yılmaz'ın molası 14:00'e alındı ve görev iletildi.)",
+  "updates": [
+    {
+      "id": 1,
+      "breakTime": "14:00",
+      "directive": "Mola dönüşü Kasa 3'e geç",
+      "status": "molada"
+    }
+  ]
+}`;
+
+      try {
+        const resText = await callGemini(systemPrompt);
+        const cleanJson = resText.replace(/```json/g, '').replace(/```/g, '').trim();
+        const actionResult = JSON.parse(cleanJson);
+
+        if (actionResult.updates && Array.isArray(actionResult.updates)) {
+          actionResult.updates.forEach(up => {
+            const p = staffList.find(item => item.id === up.id);
+            if (p) {
+              if (up.breakTime) p.breakTime = up.breakTime;
+              if (up.directive) p.directive = up.directive;
+              if (up.status) p.status = up.status;
+            }
+          });
+          renderStaffList();
+          if (currentRole === 'staff') updatePersonalView();
+        }
+
+        appendChatMessage('ai', actionResult.reply || "Talimatınız kadroya uygulandı şef!");
+      } catch (err) {
+        appendChatMessage('ai', "Hata: " + err.message);
+      }
+    }
+
+    function appendChatMessage(sender, text) {
+      const chatBox = document.getElementById('chatMessages');
+      const msg = document.createElement('div');
+      if (sender === 'user') {
+        msg.className = "flex items-start justify-end gap-2";
+        msg.innerHTML = `<div class="bg-indigo-600 rounded-2xl rounded-tr-none p-3 text-white max-w-[85%] font-medium shadow-sm leading-relaxed">${text}</div>`;
+      } else {
+        msg.className = "flex items-start gap-2.5";
+        msg.innerHTML = `
+          <div class="h-7 w-7 rounded-full bg-gradient-to-tr from-indigo-600 to-teal-400 flex items-center justify-center text-[10px] text-white font-bold shrink-0 shadow-xs">AI</div>
+          <div class="bg-white border border-slate-200/80 rounded-2xl rounded-tl-none p-3.5 text-slate-700 max-w-[85%] font-medium shadow-xs leading-relaxed">${text}</div>
+        `;
+      }
+      chatBox.appendChild(msg);
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    async function handlePdfUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      appendChatMessage('ai', 'PDF belgesi Gemini 3.6 tarafından okunuyor, personeller ayrıştırılıyor...');
+      const reader = new FileReader();
+      reader.onload = async function() {
+        const base64Data = reader.result.split(',')[1];
+        try {
+          const prompt = `Bu PDF belgesindeki vardiya listesini oku. SADECE şu JSON şemasında saf JSON ver:\n[{"name":"İsim","department":"Kasa","shiftStart":"09:00","shiftEnd":"18:00","breakTime":"13:00"}]`;
+          const responseText = await callGemini(prompt, { mime_type: 'application/pdf', base64: base64Data });
+          const cleanJson = responseText.replace(/```json/g, '').replace(/```/g, '').trim();
+          const parsedStaff = JSON.parse(cleanJson);
+
+          if (Array.isArray(parsedStaff) && parsedStaff.length > 0) {
+            staffList = parsedStaff.map((p, idx) => ({
+              id: idx + 1,
+              name: p.name || `Personel ${idx + 1}`,
+              department: p.department || 'Genel',
+              shiftStart: p.shiftStart || '09:00',
+              shiftEnd: p.shiftEnd || '18:00',
+              breakTime: p.breakTime || '13:00',
+              breakDurationMin: 30,
+              status: 'gorevde',
+              directive: 'PDF listesinden aktarıldı.'
+            }));
+            renderStaffList();
+            populateStaffDropdown();
+            appendChatMessage('ai', `Harika! PDF'ten ${parsedStaff.length} personelin vardiyası başarıyla sisteme aktarıldı.`);
+          }
+        } catch (err) {
+          appendChatMessage('ai', 'PDF Okuma Hatası: ' + err.message);
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+
+    async function runGeminiBreakWizard() {
+      appendChatMessage('ai', 'Tüm kadronun molaları izdihamsız şekilde optimize ediliyor...');
+      try {
+        const targetStaff = staffList.slice(0, 30);
+        const prompt = `Aşağıdaki personellerin molalarını 12:00-16:30 arasına izdihamsız dağıt. SADECE JSON ver:\n[{"id":1,"breakTime":"12:15"}]\nPersoneller:\n${JSON.stringify(targetStaff.map(s=>({id:s.id,dept:s.department})))}`;
+        const resText = await callGemini(prompt);
+        const schedule = JSON.parse(resText.replace(/```json/g,'').replace(/```/g,'').trim());
+
+        schedule.forEach(item => {
+          const p = staffList.find(s => s.id === item.id);
+          if (p && item.breakTime) p.breakTime = item.breakTime;
+        });
+        renderStaffList();
+        appendChatMessage('ai', 'Molalar mağazada açık kalmayacak şekilde dengelendi!');
+      } catch (err) {
+        appendChatMessage('ai', 'Hata: ' + err.message);
+      }
+    }
+
     function populateStaffDropdown() {
       const sel = document.getElementById('activeUserSelect');
       sel.innerHTML = '';
@@ -469,32 +578,33 @@
 
       const isMolada = person.status === 'molada';
       document.getElementById('userStatusSub').innerText = isMolada ? 'Şu Anda: Molada' : 'Şu Anda: Görevde';
+      document.getElementById('userStatusSub').className = isMolada ? 'text-xs font-bold text-amber-600 mt-1' : 'text-xs font-bold text-teal-600 mt-1';
       
       const btnStart = document.getElementById('btnStartBreak');
       const btnEnd = document.getElementById('btnEndBreak');
+      const personalCard = document.getElementById('personalCard');
       
       if (isMolada) {
         btnStart.disabled = true;
-        btnStart.className = "py-3 px-4 rounded-xl font-bold text-sm bg-slate-800 text-slate-500 cursor-not-allowed";
+        btnStart.className = "py-3.5 px-4 rounded-2xl font-bold text-xs sm:text-sm bg-slate-100 text-slate-400 border border-slate-200 cursor-not-allowed";
         btnEnd.disabled = false;
-        btnEnd.className = "py-3 px-4 rounded-xl font-bold text-sm bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg";
+        btnEnd.className = "py-3.5 px-4 rounded-2xl font-bold text-xs sm:text-sm bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg shadow-indigo-600/25";
         document.getElementById('timerLabel').innerText = "Molanın Bitmesine Kalan Süre";
         document.getElementById('timerCountdown').innerText = "00:18:45";
-        document.getElementById('personalCard').classList.remove('alarm-critical');
+        personalCard.classList.remove('alarm-active');
       } else {
         btnStart.disabled = false;
-        btnStart.className = "py-3 px-4 rounded-xl font-bold text-sm bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg";
+        btnStart.className = "py-3.5 px-4 rounded-2xl font-bold text-xs sm:text-sm bg-gradient-to-r from-teal-500 to-emerald-600 hover:from-teal-600 hover:to-emerald-700 text-white shadow-lg shadow-teal-500/25";
         btnEnd.disabled = true;
-        btnEnd.className = "py-3 px-4 rounded-xl font-bold text-sm bg-slate-800 text-slate-500 cursor-not-allowed";
+        btnEnd.className = "py-3.5 px-4 rounded-2xl font-bold text-xs sm:text-sm bg-slate-100 text-slate-400 border border-slate-200 cursor-not-allowed";
         document.getElementById('timerLabel').innerText = "Molaya Çıkışa Kalan Süre";
-        document.getElementById('timerCountdown').innerText = "00:04:40"; // 5 dk altı uyarısını göstermek için örnek
+        document.getElementById('timerCountdown').innerText = "00:04:40";
         
-        // 5 dk Alarm Simülasyonu
         const banner = document.getElementById('alertBanner');
-        banner.className = "py-1 px-3 rounded-lg text-xs font-bold inline-flex items-center gap-1.5 bg-rose-500/20 text-rose-300 border border-rose-500/40";
+        banner.className = "py-1.5 px-3 rounded-xl text-xs font-bold inline-flex items-center gap-2 bg-rose-50 text-rose-600 border border-rose-200 shadow-xs";
         document.getElementById('alertBannerText').innerText = "DİKKAT: Molanıza son 5 dakika kaldı!";
         banner.classList.remove('hidden');
-        document.getElementById('personalCard').classList.add('alarm-critical');
+        personalCard.classList.add('alarm-active');
       }
     }
 
@@ -510,21 +620,16 @@
     function acknowledgeDirective() {
       const btn = document.getElementById('btnAckDirective');
       btn.innerText = "✓ Talimat Onaylandı";
-      btn.className = "w-full mt-2 py-1.5 bg-emerald-700 text-white text-xs font-semibold rounded-lg";
+      btn.className = "w-full mt-2 py-2 bg-teal-600 text-white text-xs font-bold rounded-xl";
     }
 
-    // ==============================================
-    // 7. GEMINI API ENTEGRASYONU (AI Sihirbazı & PDF)
-    // ==============================================
     function openApiKeyModal() {
       document.getElementById('geminiApiKeyInput').value = geminiApiKey;
       document.getElementById('apiKeyModal').classList.remove('hidden');
     }
-
     function closeApiKeyModal() {
       document.getElementById('apiKeyModal').classList.add('hidden');
     }
-
     function saveApiKey() {
       const key = document.getElementById('geminiApiKeyInput').value.trim();
       geminiApiKey = key;
@@ -532,171 +637,17 @@
       updateApiKeyStatus();
       closeApiKeyModal();
     }
-
     function updateApiKeyStatus() {
       const txt = document.getElementById('apiKeyStatusText');
       if (geminiApiKey) {
         txt.innerText = "API Aktif ✓";
-        txt.className = "text-emerald-400 font-semibold";
+        txt.className = "text-teal-600 font-bold";
       } else {
-        txt.innerText = "API Anahtarı Gir";
-        txt.className = "text-slate-300";
+        txt.innerText = "API Anahtarı";
+        txt.className = "text-slate-700";
       }
     }
 
-    // Gemini API Çağrısı (Metin / JSON)
-    async function callGemini(promptText, inlineData = null) {
-      if (!geminiApiKey) {
-        openApiKeyModal();
-        throw new Error("Lütfen önce Google AI Studio'dan aldığınız Gemini API anahtarınızı girin.");
-      }
-
-      // Gemini-3.6-flash / 1.5 Flash Endpoint
-      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${geminiApiKey}`;
-
-      const contents = [{
-        parts: []
-      }];
-
-      if (inlineData) {
-        contents[0].parts.push({
-          inline_data: {
-            mime_type: inlineData.mime_type,
-            data: inlineData.base64
-          }
-        });
-      }
-
-      contents[0].parts.push({ text: promptText });
-
-      const res = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ contents })
-      });
-
-      if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.error?.message || "Gemini API isteği başarısız oldu.");
-      }
-
-      const data = await res.json();
-      return data.candidates[0].content.parts[0].text;
-    }
-
-    // Özellik 1: AI Mola Sihirbazı (Çakışmasız Dengeleme)
-    async function runGeminiBreakWizard() {
-      const loader = document.getElementById('aiLoadingIndicator');
-      const loaderText = document.getElementById('aiLoadingText');
-      loader.classList.remove('hidden');
-      loaderText.innerText = `${currentDeptFilter} departmanı için çakışmasız mola planı oluşturuluyor...`;
-
-      try {
-        const targetStaff = staffList.filter(s => currentDeptFilter === 'Tümü' || s.department === currentDeptFilter).slice(0, 30);
-        
-        const prompt = `
-Aşağıda bir işletmedeki personellerin listesi verilmiştir. 
-Saat 12:00 ile 16:30 arasında, aynı anda en fazla 3-4 kişi molada olacak şekilde, izdiham yaratmayacak çakışmasız yeni mola saatleri planla.
-Her personelin molası 30 dakikadır.
-
-Personeller:
-${JSON.stringify(targetStaff.map(s => ({ id: s.id, name: s.name, dept: s.department })))}
-
-Lütfen SADECE aşağıdaki JSON formatında saf bir JSON dizisi döndür (başka açıklama yazma):
-[
-  { "id": 1, "breakTime": "12:15" },
-  { "id": 2, "breakTime": "12:35" }
-]`;
-
-        const responseText = await callGemini(prompt);
-        // Markdown temizleme
-        const cleanJson = responseText.replace(/```json/g, '').replace(/```/g, '').trim();
-        const schedule = JSON.parse(cleanJson);
-
-        schedule.forEach(item => {
-          const person = staffList.find(p => p.id === item.id);
-          if (person && item.breakTime) {
-            person.breakTime = item.breakTime;
-          }
-        });
-
-        renderStaffList();
-        alert(`Gemini AI ${schedule.length} personelin molasını izdihamsız şekilde optimize etti!`);
-      } catch (err) {
-        alert("Hata: " + err.message);
-      } finally {
-        loader.classList.add('hidden');
-      }
-    }
-
-    // Özellik 2: PDF Vardiya Dosyası Okuma & Entegrasyon
-    async function handlePdfUpload(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-
-      const loader = document.getElementById('aiLoadingIndicator');
-      const loaderText = document.getElementById('aiLoadingText');
-      loader.classList.remove('hidden');
-      loaderText.innerText = "PDF dosyası Gemini Multimodal Vision motoruna yükleniyor ve okunuyor...";
-
-      const reader = new FileReader();
-      reader.onload = async function() {
-        const base64Data = reader.result.split(',')[1];
-        
-        try {
-          const prompt = `
-Bu yüklenen PDF belgesindeki vardiya çizelgesini analiz et.
-Personel adlarını, departmanlarını ve varsa vardiya başlama-bitiş saatlerini çıkar.
-Lütfen yanıtı SADECE şu JSON şemasına uygun saf JSON olarak ver:
-[
-  {
-    "name": "Personel Adı",
-    "department": "Kasa veya Reyon veya Depo",
-    "shiftStart": "09:00",
-    "shiftEnd": "18:00",
-    "breakTime": "13:00"
-  }
-]`;
-
-          const responseText = await callGemini(prompt, {
-            mime_type: 'application/pdf',
-            base64: base64Data
-          });
-
-          const cleanJson = responseText.replace(/```json/g, '').replace(/```/g, '').trim();
-          const parsedStaff = JSON.parse(cleanJson);
-
-          if (Array.isArray(parsedStaff) && parsedStaff.length > 0) {
-            staffList = parsedStaff.map((p, idx) => ({
-              id: idx + 1,
-              name: p.name || `Personel ${idx + 1}`,
-              department: p.department || 'Genel',
-              shiftStart: p.shiftStart || '09:00',
-              shiftEnd: p.shiftEnd || '18:00',
-              breakTime: p.breakTime || '13:00',
-              breakDurationMin: 30,
-              status: 'gorevde',
-              directive: 'PDF vardiya listesinden aktarıldı.'
-            }));
-
-            renderStaffList();
-            populateStaffDropdown();
-            alert(`Harika! Gemini PDF içerisinden ${parsedStaff.length} personelin vardiya ve mola bilgilerini sisteme aktardı.`);
-          } else {
-            alert("PDF okundu fakat geçerli personel tablosu bulunamadı.");
-          }
-
-        } catch (err) {
-          alert("PDF İşleme Hatası: " + err.message);
-        } finally {
-          loader.classList.add('hidden');
-          event.target.value = ''; // Reset input
-        }
-      };
-      reader.readAsDataURL(file);
-    }
-
-    // Sayfa Yüklenince Başlat
     window.addEventListener('DOMContentLoaded', () => {
       updateApiKeyStatus();
       renderStaffList();
